@@ -1,0 +1,428 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "Using TensorFlow backend.\n",
+      "c:\\users\\최동현\\appdata\\local\\programs\\python\\python36\\lib\\site-packages\\tensorflow\\python\\framework\\dtypes.py:526: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.\n",
+      "  _np_qint8 = np.dtype([(\"qint8\", np.int8, 1)])\n",
+      "c:\\users\\최동현\\appdata\\local\\programs\\python\\python36\\lib\\site-packages\\tensorflow\\python\\framework\\dtypes.py:527: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.\n",
+      "  _np_quint8 = np.dtype([(\"quint8\", np.uint8, 1)])\n",
+      "c:\\users\\최동현\\appdata\\local\\programs\\python\\python36\\lib\\site-packages\\tensorflow\\python\\framework\\dtypes.py:528: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.\n",
+      "  _np_qint16 = np.dtype([(\"qint16\", np.int16, 1)])\n",
+      "c:\\users\\최동현\\appdata\\local\\programs\\python\\python36\\lib\\site-packages\\tensorflow\\python\\framework\\dtypes.py:529: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.\n",
+      "  _np_quint16 = np.dtype([(\"quint16\", np.uint16, 1)])\n",
+      "c:\\users\\최동현\\appdata\\local\\programs\\python\\python36\\lib\\site-packages\\tensorflow\\python\\framework\\dtypes.py:530: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.\n",
+      "  _np_qint32 = np.dtype([(\"qint32\", np.int32, 1)])\n",
+      "c:\\users\\최동현\\appdata\\local\\programs\\python\\python36\\lib\\site-packages\\tensorflow\\python\\framework\\dtypes.py:535: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.\n",
+      "  np_resource = np.dtype([(\"resource\", np.ubyte, 1)])\n"
+     ]
+    }
+   ],
+   "source": [
+    "import keras\n",
+    "import numpy as np\n",
+    "import pandas as pd"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>year</th>\n",
+       "      <th>month</th>\n",
+       "      <th>day</th>\n",
+       "      <th>time</th>\n",
+       "      <th>temperature</th>\n",
+       "      <th>land temperature</th>\n",
+       "      <th>bright sunshine</th>\n",
+       "      <th>humidity</th>\n",
+       "      <th>wind speed</th>\n",
+       "      <th>solar energy production</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <td>0</td>\n",
+       "      <td>2017</td>\n",
+       "      <td>7</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>25.8</td>\n",
+       "      <td>24.7</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>84</td>\n",
+       "      <td>1.2</td>\n",
+       "      <td>0.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <td>1</td>\n",
+       "      <td>2017</td>\n",
+       "      <td>7</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>25.6</td>\n",
+       "      <td>24.4</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>84</td>\n",
+       "      <td>2.0</td>\n",
+       "      <td>0.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <td>2</td>\n",
+       "      <td>2017</td>\n",
+       "      <td>7</td>\n",
+       "      <td>1</td>\n",
+       "      <td>2</td>\n",
+       "      <td>25.5</td>\n",
+       "      <td>24.3</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>84</td>\n",
+       "      <td>2.1</td>\n",
+       "      <td>0.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <td>3</td>\n",
+       "      <td>2017</td>\n",
+       "      <td>7</td>\n",
+       "      <td>1</td>\n",
+       "      <td>3</td>\n",
+       "      <td>25.1</td>\n",
+       "      <td>24.2</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>86</td>\n",
+       "      <td>0.4</td>\n",
+       "      <td>0.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <td>4</td>\n",
+       "      <td>2017</td>\n",
+       "      <td>7</td>\n",
+       "      <td>1</td>\n",
+       "      <td>4</td>\n",
+       "      <td>23.9</td>\n",
+       "      <td>24.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>90</td>\n",
+       "      <td>1.3</td>\n",
+       "      <td>0.0</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "   year  month  day  time  temperature  land temperature  bright sunshine  \\\n",
+       "0  2017      7    1     0         25.8              24.7              0.0   \n",
+       "1  2017      7    1     1         25.6              24.4              0.0   \n",
+       "2  2017      7    1     2         25.5              24.3              0.0   \n",
+       "3  2017      7    1     3         25.1              24.2              0.0   \n",
+       "4  2017      7    1     4         23.9              24.0              0.0   \n",
+       "\n",
+       "   humidity  wind speed  solar energy production  \n",
+       "0        84         1.2                      0.0  \n",
+       "1        84         2.0                      0.0  \n",
+       "2        84         2.1                      0.0  \n",
+       "3        86         0.4                      0.0  \n",
+       "4        90         1.3                      0.0  "
+      ]
+     },
+     "execution_count": 2,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df = pd.read_csv('c:/jupyter/data2.csv')\n",
+    "df.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "x = df.drop(columns=['solar energy production', 'year', 'land temperature'])\n",
+    "y = df[['land temperature']]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "model = keras.Sequential()\n",
+    "model.add(keras.layers.Dense(7, activation='relu', input_shape=(7,)))\n",
+    "model.add(keras.layers.Dense(100, activation='relu'))\n",
+    "model.add(keras.layers.Dense(1))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "model.compile(optimizer='adam', loss='mean_squared_error')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "WARNING:tensorflow:From c:\\users\\최동현\\appdata\\local\\programs\\python\\python36\\lib\\site-packages\\tensorflow\\python\\ops\\math_ops.py:3066: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.\n",
+      "Instructions for updating:\n",
+      "Use tf.cast instead.\n",
+      "Epoch 1/60\n",
+      "17520/17520 [==============================] - 1s 72us/step - loss: 53.2132\n",
+      "Epoch 2/60\n",
+      " 3776/17520 [=====>........................] - ETA: 0s - loss: 11.7779"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "c:\\users\\최동현\\appdata\\local\\programs\\python\\python36\\lib\\site-packages\\keras\\callbacks.py:569: RuntimeWarning: Early stopping conditioned on metric `val_loss` which is not available. Available metrics are: loss\n",
+      "  (self.monitor, ','.join(list(logs.keys()))), RuntimeWarning\n"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "17520/17520 [==============================] - 1s 37us/step - loss: 11.2626\n",
+      "Epoch 3/60\n",
+      "17520/17520 [==============================] - 1s 35us/step - loss: 10.4159\n",
+      "Epoch 4/60\n",
+      "17520/17520 [==============================] - 1s 34us/step - loss: 9.9295\n",
+      "Epoch 5/60\n",
+      "17520/17520 [==============================] - 1s 37us/step - loss: 9.7010\n",
+      "Epoch 6/60\n",
+      "17520/17520 [==============================] - 1s 37us/step - loss: 9.4855\n",
+      "Epoch 7/60\n",
+      "17520/17520 [==============================] - 1s 34us/step - loss: 9.5582\n",
+      "Epoch 8/60\n",
+      "17520/17520 [==============================] - 1s 34us/step - loss: 9.4078\n",
+      "Epoch 9/60\n",
+      "17520/17520 [==============================] - 1s 36us/step - loss: 9.2424\n",
+      "Epoch 10/60\n",
+      "17520/17520 [==============================] - 1s 38us/step - loss: 9.2120\n",
+      "Epoch 11/60\n",
+      "17520/17520 [==============================] - 1s 42us/step - loss: 9.2322\n",
+      "Epoch 12/60\n",
+      "17520/17520 [==============================] - 1s 38us/step - loss: 9.1353\n",
+      "Epoch 13/60\n",
+      "17520/17520 [==============================] - 1s 37us/step - loss: 9.0973\n",
+      "Epoch 14/60\n",
+      "17520/17520 [==============================] - 1s 49us/step - loss: 8.9896\n",
+      "Epoch 15/60\n",
+      "17520/17520 [==============================] - 1s 51us/step - loss: 9.0182\n",
+      "Epoch 16/60\n",
+      "17520/17520 [==============================] - 1s 38us/step - loss: 8.8706\n",
+      "Epoch 17/60\n",
+      "17520/17520 [==============================] - 1s 36us/step - loss: 8.9645\n",
+      "Epoch 18/60\n",
+      "17520/17520 [==============================] - 1s 41us/step - loss: 8.8058\n",
+      "Epoch 19/60\n",
+      "17520/17520 [==============================] - 1s 40us/step - loss: 8.7589\n",
+      "Epoch 20/60\n",
+      "17520/17520 [==============================] - 1s 41us/step - loss: 8.7045\n",
+      "Epoch 21/60\n",
+      "17520/17520 [==============================] - 1s 37us/step - loss: 8.6523\n",
+      "Epoch 22/60\n",
+      "17520/17520 [==============================] - 1s 37us/step - loss: 8.7150\n",
+      "Epoch 23/60\n",
+      "17520/17520 [==============================] - 1s 46us/step - loss: 8.5649\n",
+      "Epoch 24/60\n",
+      "17520/17520 [==============================] - 1s 38us/step - loss: 8.5184\n",
+      "Epoch 25/60\n",
+      "17520/17520 [==============================] - 1s 37us/step - loss: 8.4939\n",
+      "Epoch 26/60\n",
+      "17520/17520 [==============================] - 1s 37us/step - loss: 8.4699A: 0s - l\n",
+      "Epoch 27/60\n",
+      "17520/17520 [==============================] - 1s 35us/step - loss: 8.4283\n",
+      "Epoch 28/60\n",
+      "17520/17520 [==============================] - 1s 54us/step - loss: 8.4224\n",
+      "Epoch 29/60\n",
+      "17520/17520 [==============================] - 1s 38us/step - loss: 8.3447\n",
+      "Epoch 30/60\n",
+      "17520/17520 [==============================] - 1s 34us/step - loss: 8.4121\n",
+      "Epoch 31/60\n",
+      "17520/17520 [==============================] - 1s 35us/step - loss: 8.3852\n",
+      "Epoch 32/60\n",
+      "17520/17520 [==============================] - 1s 34us/step - loss: 8.3615\n",
+      "Epoch 33/60\n",
+      "17520/17520 [==============================] - 1s 47us/step - loss: 8.3417\n",
+      "Epoch 34/60\n",
+      "17520/17520 [==============================] - 1s 48us/step - loss: 8.2799\n",
+      "Epoch 35/60\n",
+      "17520/17520 [==============================] - 1s 48us/step - loss: 8.3256\n",
+      "Epoch 36/60\n",
+      "17520/17520 [==============================] - 1s 36us/step - loss: 8.3210\n",
+      "Epoch 37/60\n",
+      "17520/17520 [==============================] - 1s 39us/step - loss: 8.3555\n",
+      "Epoch 38/60\n",
+      "17520/17520 [==============================] - 1s 43us/step - loss: 8.2570\n",
+      "Epoch 39/60\n",
+      "17520/17520 [==============================] - 1s 64us/step - loss: 8.3406\n",
+      "Epoch 40/60\n",
+      "17520/17520 [==============================] - 1s 55us/step - loss: 8.1889\n",
+      "Epoch 41/60\n",
+      "17520/17520 [==============================] - 1s 57us/step - loss: 8.2250\n",
+      "Epoch 42/60\n",
+      "17520/17520 [==============================] - 1s 45us/step - loss: 8.1971\n",
+      "Epoch 43/60\n",
+      "17520/17520 [==============================] - 1s 44us/step - loss: 8.1543\n",
+      "Epoch 44/60\n",
+      "17520/17520 [==============================] - 1s 44us/step - loss: 8.1089\n",
+      "Epoch 45/60\n",
+      "17520/17520 [==============================] - 1s 52us/step - loss: 8.1538\n",
+      "Epoch 46/60\n",
+      "17520/17520 [==============================] - 1s 36us/step - loss: 8.0869\n",
+      "Epoch 47/60\n",
+      "17520/17520 [==============================] - 1s 37us/step - loss: 8.1149\n",
+      "Epoch 48/60\n",
+      "17520/17520 [==============================] - 1s 40us/step - loss: 8.0565\n",
+      "Epoch 49/60\n",
+      "17520/17520 [==============================] - 1s 43us/step - loss: 8.0544\n",
+      "Epoch 50/60\n",
+      "17520/17520 [==============================] - 1s 45us/step - loss: 8.0097\n",
+      "Epoch 51/60\n",
+      "17520/17520 [==============================] - 1s 38us/step - loss: 8.0179\n",
+      "Epoch 52/60\n",
+      "17520/17520 [==============================] - 1s 36us/step - loss: 7.8957\n",
+      "Epoch 53/60\n",
+      "17520/17520 [==============================] - 1s 38us/step - loss: 7.9385\n",
+      "Epoch 54/60\n",
+      "17520/17520 [==============================] - 1s 39us/step - loss: 7.8321\n",
+      "Epoch 55/60\n",
+      "17520/17520 [==============================] - 1s 43us/step - loss: 7.8047\n",
+      "Epoch 56/60\n",
+      "17520/17520 [==============================] - 1s 42us/step - loss: 7.7069\n",
+      "Epoch 57/60\n",
+      "17520/17520 [==============================] - 1s 49us/step - loss: 7.7086\n",
+      "Epoch 58/60\n",
+      "17520/17520 [==============================] - 1s 34us/step - loss: 7.6068\n",
+      "Epoch 59/60\n",
+      "17520/17520 [==============================] - 1s 40us/step - loss: 7.5516\n",
+      "Epoch 60/60\n",
+      "17520/17520 [==============================] - 1s 50us/step - loss: 7.4406\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "<keras.callbacks.History at 0x20f4dafab38>"
+      ]
+     },
+     "execution_count": 10,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "model.fit(x, y, epochs=60, callbacks=[keras.callbacks.EarlyStopping(patience=5)])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[[24.388544]]\n"
+     ]
+    }
+   ],
+   "source": [
+    "test_data = np.array([7, 1, 0, 25.8, 0.0, 84, 1.2])\n",
+    "print(model.predict(test_data.reshape(1,7), batch_size=1))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[[3.385073]]\n"
+     ]
+    }
+   ],
+   "source": [
+    "test_data = np.array([12, 31, 0, 4.3, 0.0, 80, 0.8])\n",
+    "print(model.predict(test_data.reshape(1,7), batch_size=1))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.6.6"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
